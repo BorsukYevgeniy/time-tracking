@@ -6,5 +6,4 @@ import { MessagePattern } from '@nestjs/microservices';
 @Controller()
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
 }

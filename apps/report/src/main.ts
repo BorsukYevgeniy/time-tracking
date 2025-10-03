@@ -1,12 +1,20 @@
 import { NestFactory } from '@nestjs/core';
 import { ReportModule } from './report.module';
 
-import { Transport, MicroserviceOptions } from '@nestjs/microservices';
+import { MicroserviceOptions } from '@nestjs/microservices';
+import { ConfigService } from '../../config/config.service';
 
 async function bootstrap() {
+  const appContext = await NestFactory.createApplicationContext(ReportModule);
+  const configService = appContext.get(ConfigService);
+
+  const reportConfig = configService.REPORT_CONFIG;
+
+  appContext.close();
+
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
     ReportModule,
-    { transport: Transport.TCP, options: { port: 3003 } },
+    reportConfig,
   );
   await app.listen();
 }

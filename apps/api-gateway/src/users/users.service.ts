@@ -1,10 +1,13 @@
-import { Injectable , Inject} from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 
-import {ClientProxy} from '@nestjs/microservices'
+import { ClientProxy } from '@nestjs/microservices';
+import { USER_CLIENT } from './constants';
 
 @Injectable()
 export class UsersService {
-  constructor(@Inject('USERS_CLIENT') private readonly usersClient: ClientProxy){
-  }
+  constructor(@Inject(USER_CLIENT) private readonly usersClient: ClientProxy) {}
 
+  async getHello() {
+    return this.usersClient.send<string>('test', {});
+  }
 }
