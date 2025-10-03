@@ -5,8 +5,5 @@ import { TimelogService } from './timelog.service';
 export class TimelogController {
   constructor(private readonly timelogService: TimelogService) {}
 
-  @Get()
-  getHello(): string {
-    return this.timelogService.getHello();
-  }
+
 }
