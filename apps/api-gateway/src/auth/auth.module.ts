@@ -2,9 +2,8 @@ import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { ClientsModule } from '@nestjs/microservices';
-import { ConfigModule } from '../../../config/config.module';
-import { ConfigService } from '../../../config/config.service';
 import { AUTH_CLIENT } from './constants';
+import { ConfigModule, ConfigService } from '@shared/config';
 
 @Module({
   imports: [

@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { ApiGatewayModule } from './api-gateway.module';
-import { ConfigService } from '../../config/config.service';
+import { ConfigService } from '@shared/config';
 
 async function bootstrap() {
   const appContext =
@@ -8,6 +8,8 @@ async function bootstrap() {
   const configService = appContext.get(ConfigService);
 
   const apiGatewayConfig = configService.API_GATEWAY_CONFIG;
+
+  console.log('API Gateway running on port:', apiGatewayConfig);
 
   appContext.close();
 

@@ -13,7 +13,7 @@ import { ConfigService } from './config.service';
         'apps/timelog/.env',
         'apps/api-gateway/.env',
       ],
-    }),
+    },),
   ],
   providers: [ConfigService],
   exports: [ConfigService],

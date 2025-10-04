@@ -4,9 +4,7 @@ import { UsersController } from './users.controller';
 
 import { ClientsModule } from '@nestjs/microservices';
 import { USER_CLIENT } from './constants';
-
-import { ConfigModule } from '../../../config/config.module';
-import { ConfigService } from '../../../config/config.service';
+import { ConfigService, ConfigModule } from '@shared/config';
 
 @Module({
   imports: [

@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TimelogService } from './timelog.service';
 import { ClientsModule } from '@nestjs/microservices';
-import { ConfigModule } from '../../../config/config.module';
-import { ConfigService } from '../../../config/config.service';
 import { TIMELOG_CLIENT } from './constants';
+import { ConfigService, ConfigModule } from '@shared/config';
 
 @Module({
   imports: [

@@ -2,9 +2,8 @@ import { Module } from '@nestjs/common';
 import { ReportService } from './report.service';
 import { ReportController } from './report.controller';
 import { ClientsModule } from '@nestjs/microservices';
-import { ConfigService } from '../../../config/config.service';
-import { ConfigModule } from '../../../config/config.module';
 import { REPORT_CLIENT } from './constants';
+import { ConfigModule, ConfigService } from '@shared/config';
 
 @Module({
   imports: [

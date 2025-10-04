@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { ReportModule } from './report.module';
 
 import { MicroserviceOptions } from '@nestjs/microservices';
-import { ConfigService } from '../../config/config.service';
+import { ConfigService } from '@shared/config';
 
 async function bootstrap() {
   const appContext = await NestFactory.createApplicationContext(ReportModule);
