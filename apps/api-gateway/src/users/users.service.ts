@@ -8,6 +8,6 @@ export class UsersService {
   constructor(@Inject(USER_CLIENT) private readonly usersClient: ClientProxy) {}
 
   async getHello() {
-    return this.usersClient.send<string>('test', {});
+    return this.usersClient.send<string>('users.create', {});
   }
 }
