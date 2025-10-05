@@ -3,7 +3,7 @@ import { ConfigService as NestConfigService } from '@nestjs/config';
 
 import { ClientOptions, Transport } from '@nestjs/microservices';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { resolve } from 'path';
+import { JwtModuleOptions } from '@nestjs/jwt';
 
 @Injectable()
 export class ConfigService {
@@ -61,5 +61,12 @@ export class ConfigService {
 
   get API_GATEWAY_CONFIG(): number {
     return this.nestConfigService.get<number>('API_GATEWAY_PORT');
+  }
+
+  get JWT_CONFIG(): JwtModuleOptions {
+    return {
+      secret: this.nestConfigService.get<string>('JWT_SECRET'),
+      signOptions: { expiresIn: this.nestConfigService.get<string>('JWT_EXPIRATION_TIME') },
+    };
   }
 }

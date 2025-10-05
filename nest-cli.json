@@ -63,6 +63,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/shared/config/tsconfig.lib.json"
       }
+    },
+    "shared/users/dto": {
+      "type": "library",
+      "root": "libs/shared/users/dto",
+      "entryFile": "index",
+      "sourceRoot": "libs/shared/users/dto/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/shared/users/dto/tsconfig.lib.json"
+      }
     }
   }
 }

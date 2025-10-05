@@ -21,6 +21,9 @@
       "@shared/config": [
         "libs/shared/config/src"
       ],
+      "@shared/users/dto": [
+        "libs/shared/users/dto"
+      ]
     }
   }
 }

@@ -2,8 +2,9 @@ import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { ClientsModule } from '@nestjs/microservices';
-import { AUTH_CLIENT } from './constants';
 import { ConfigModule, ConfigService } from '@shared/config';
+import { JwtModule } from '@nestjs/jwt';
+import { USER_CLIENT } from '../users/constants';
 
 @Module({
   imports: [
@@ -11,11 +12,16 @@ import { ConfigModule, ConfigService } from '@shared/config';
       {
         imports: [ConfigModule],
         inject: [ConfigService],
-        name: AUTH_CLIENT,
+        name: USER_CLIENT,
         useFactory: async (configService: ConfigService) =>
-          configService.AUTH_CONFIG,
+          configService.USER_CONFIG,
       },
     ]),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => configService.JWT_CONFIG
+    }),
   ],
   controllers: [AuthController],
   providers: [AuthService],
