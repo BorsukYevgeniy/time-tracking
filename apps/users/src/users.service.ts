@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './users.entity';
-import { CreateUserDto } from '@shared/users/dto';
+import { CreateUserDto } from '@contracts/users';
 
 @Injectable()
 export class UsersService {
@@ -14,7 +14,7 @@ export class UsersService {
     return await this.usersRepository.findOneBy({ email });
   }
 
-  async create(dto: CreateUserDto) {
+  async create(dto: CreateUserDto): Promise<User> {
     return await this.usersRepository.save(dto);
   }
 }

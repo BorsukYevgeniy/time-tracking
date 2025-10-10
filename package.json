@@ -79,7 +79,9 @@
     ],
     "moduleNameMapper": {
       "^@shared/config/shared/config(|/.*)$": "<rootDir>/libs/shared/config/src/$1",
-      "^@shared/users/dto/shared/users/dto(|/.*)$": "<rootDir>/libs/shared/users/dto/src/$1"
+      "^@shared/users/dto/shared/users/dto(|/.*)$": "<rootDir>/libs/shared/users/dto/src/$1",
+      "^@contracts/users/contracts(|/.*)$": "<rootDir>/libs/contracts/src/$1",
+      "^@contracts/users/contracts/users(|/.*)$": "<rootDir>/libs/contracts/users/src/$1"
     }
   }
 }

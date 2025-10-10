@@ -72,6 +72,24 @@
       "compilerOptions": {
         "tsConfigPath": "libs/shared/users/dto/tsconfig.lib.json"
       }
+    },
+    "contracts": {
+      "type": "library",
+      "root": "libs/contracts",
+      "entryFile": "index",
+      "sourceRoot": "libs/contracts/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/contracts/tsconfig.lib.json"
+      }
+    },
+    "contracts/users": {
+      "type": "library",
+      "root": "libs/contracts/users",
+      "entryFile": "index",
+      "sourceRoot": "libs/contracts/users/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/contracts/users/tsconfig.lib.json"
+      }
     }
   }
 }

@@ -10,7 +10,7 @@ import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { LoginDto } from './dto/login.dto';
 
-import { CreateUserDto } from '@shared/users/dto';
+import { CreateUserDto } from '@contracts/users';
 
 @Controller('auth')
 export class AuthController {

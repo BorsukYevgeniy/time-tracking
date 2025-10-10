@@ -5,13 +5,12 @@ import {
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { USER_CLIENT } from '../users/constants';
-import { RegisterDto } from './dto/register.dto';
 import { firstValueFrom } from 'rxjs';
-import { User } from '../../../users/src/users.entity';
 
 import { hash, compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from './dto/login.dto';
+import { CreateUserDto, User } from '@contracts/users';
 
 @Injectable()
 export class AuthService {
@@ -26,7 +25,7 @@ export class AuthService {
     });
   }
 
-  async register(dto: RegisterDto) {
+  async register(dto: CreateUserDto) {
     const user: User | null = await firstValueFrom(
       this.userClient.send('users.findByEmail', dto.email),
     );
