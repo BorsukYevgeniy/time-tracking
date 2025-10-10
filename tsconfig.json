@@ -19,7 +19,7 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@shared/config": [
-        "libs/shared/config/src"
+        "libs/shared/config"
       ],
       "@contracts/users": [
         "libs/contracts/users"
