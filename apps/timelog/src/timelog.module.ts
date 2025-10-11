@@ -4,6 +4,7 @@ import { TimelogService } from './timelog.service';
 import { ConfigModule, ConfigService } from '@shared/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { Timelog } from './timelog.entity';
+import { TimelogRepository } from './timelog.repository';
 
 @Module({
   imports: [
@@ -20,6 +21,6 @@ import { Timelog } from './timelog.entity';
     TypeOrmModule.forFeature([Timelog]),
   ],
   controllers: [TimelogController],
-  providers: [TimelogService],
+  providers: [TimelogService, TimelogRepository],
 })
 export class TimelogModule {}

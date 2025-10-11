@@ -90,6 +90,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/contracts/users/tsconfig.lib.json"
       }
+    },
+    "contracts/timelog": {
+      "type": "library",
+      "root": "libs/contracts/timelog",
+      "entryFile": "index",
+      "sourceRoot": "libs/contracts/timelog/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/contracts/timelog/tsconfig.lib.json"
+      }
     }
   }
 }

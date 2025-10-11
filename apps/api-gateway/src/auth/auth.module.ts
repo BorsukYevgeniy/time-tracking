@@ -8,20 +8,16 @@ import { USER_CLIENT } from '../users/constants';
 
 @Module({
   imports: [
+    ConfigModule,
     ClientsModule.registerAsync([
       {
         imports: [ConfigModule],
         inject: [ConfigService],
         name: USER_CLIENT,
-        useFactory: async (configService: ConfigService) =>
-          configService.USER_CONFIG,
+        useFactory: (configService: ConfigService) => configService.USER_CONFIG,
       },
     ]),
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => configService.JWT_CONFIG
-    }),
+    JwtModule
   ],
   controllers: [AuthController],
   providers: [AuthService],

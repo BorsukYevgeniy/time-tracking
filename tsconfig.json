@@ -23,6 +23,9 @@
       ],
       "@contracts/users": [
         "libs/contracts/users"
+      ],
+      "@contracts/timelog": [
+        "libs/contracts/timelog"
       ]
     }
   }

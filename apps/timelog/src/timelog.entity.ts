@@ -8,8 +8,8 @@ export class Timelog {
   @Column({ type: 'timestamp' })
   start: Date;
 
-  @Column({ type: 'timestamp' })
-  end: Date;
+  @Column({ type: 'timestamp', nullable: true })
+  end: Date | null;
 
   @Column()
   userId: number;
