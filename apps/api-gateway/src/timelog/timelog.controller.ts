@@ -1,7 +1,16 @@
-import { Controller, HttpCode, HttpStatus, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { TimelogService } from './timelog.service';
 import { AuthRequest } from '../types/auth-request.type';
 import { AuthGuard } from '../auth/guard/auth.guard';
+import { Observable } from 'rxjs';
+import { Timelog } from '@contracts/timelog';
 
 @Controller('timelog')
 @UseGuards(AuthGuard)
@@ -9,13 +18,13 @@ export class TimelogController {
   constructor(private readonly timelogService: TimelogService) {}
 
   @Post('start')
-  async start(@Req() req: AuthRequest) {
-    return await this.timelogService.start(req.user.id);
+  start(@Req() req: AuthRequest): Observable<Timelog> {
+    return this.timelogService.start(req.user.id);
   }
 
   @Post('end')
   @HttpCode(HttpStatus.OK)
-  async end(@Req() req: AuthRequest) {
-    return await this.timelogService.end(req.user.id);
+  end(@Req() req: AuthRequest): Observable<Timelog> {
+    return this.timelogService.end(req.user.id);
   }
 }

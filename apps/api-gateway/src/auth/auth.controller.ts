@@ -19,14 +19,13 @@ export class AuthController {
   @Post('register')
   async register(@Body() dto: CreateUserDto, @Res() res: Response) {
     const token = await this.authService.register(dto);
-  
-  res
+
+    res
       .cookie('accessToken', token, {
         maxAge: 60 * 60 * 1000,
         httpOnly: true,
       })
       .sendStatus(201);
-  
   }
 
   @Post('login')

@@ -1,21 +1,21 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { TIMELOG_CLIENT } from './constants';
-import { firstValueFrom } from 'rxjs';
-import { Timelog } from '@contracts/timelog';
+import { Timelog, TIMELOG_PATTERNS } from '@contracts/timelog';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class TimelogService {
   @Inject(TIMELOG_CLIENT) private readonly timelogClient: ClientProxy;
 
-  async start(userId: number): Promise<Timelog> {
-    return firstValueFrom(
-      this.timelogClient.send<Timelog>('timelog.start', userId),
-    );
+  start(userId: number): Observable<Timelog> {
+    return this.timelogClient.send<Timelog>(TIMELOG_PATTERNS.START, userId);
   }
-  async end(userId: number): Promise<Timelog> {
-    return firstValueFrom<Timelog>(
-      this.timelogClient.send('timelog.end', userId),
+
+  end(userId: number): Observable<Timelog> {
+    return this.timelogClient.send<Timelog, number>(
+      TIMELOG_PATTERNS.END,
+      userId,
     );
   }
 }

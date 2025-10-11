@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Inject,
-  Injectable,
-} from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { USER_CLIENT } from '../users/constants';
 import { firstValueFrom } from 'rxjs';
@@ -10,7 +6,7 @@ import { firstValueFrom } from 'rxjs';
 import { hash, compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from './dto/login.dto';
-import { CreateUserDto, User } from '@contracts/users';
+import { CreateUserDto, User, USER_PATTERNS } from '@contracts/users';
 
 @Injectable()
 export class AuthService {
@@ -25,9 +21,12 @@ export class AuthService {
     });
   }
 
-  async register(dto: CreateUserDto) {
+  async register(dto: CreateUserDto): Promise<string> {
     const user: User | null = await firstValueFrom(
-      this.userClient.send('users.findByEmail', dto.email),
+      this.userClient.send(
+        USER_PATTERNS.FIND_BY_EMAIL,
+        dto.email,
+      ),
     );
 
     if (user) {
@@ -36,8 +35,8 @@ export class AuthService {
 
     const hashedPassword = await hash(dto.password, 6);
 
-    const newUser = await firstValueFrom(
-      this.userClient.send('users.create', {
+    const newUser: User = await firstValueFrom(
+      this.userClient.send(USER_PATTERNS.CREATE, {
         ...dto,
         password: hashedPassword,
       }),
@@ -46,9 +45,9 @@ export class AuthService {
     return await this.generateToken(newUser);
   }
 
-  async login(dto: LoginDto) {
+  async login(dto: LoginDto): Promise<string> {
     const user: User | null = await firstValueFrom(
-      this.userClient.send('users.findByEmail', dto.email),
+      this.userClient.send(USER_PATTERNS.FIND_BY_EMAIL, dto.email),
     );
 
     if (!user) {
