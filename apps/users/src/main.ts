@@ -1,14 +1,14 @@
 import { NestFactory } from '@nestjs/core';
 import { UsersModule } from './users.module';
 import { MicroserviceOptions } from '@nestjs/microservices';
-import { ConfigService } from '@shared/config';
+import { ConfigModule, ConfigService } from '@shared/config';
 
 async function bootstrap() {
-  const appContext = await NestFactory.createApplicationContext(UsersModule);
-  const configService = appContext.get(ConfigService);
+  const configCtx = await NestFactory.createApplicationContext(ConfigModule);
+  const configService = configCtx.get(ConfigService);
 
   const userConfig = configService.USER_CONFIG;
-  appContext.close();
+  configCtx.close();
 
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
     UsersModule,

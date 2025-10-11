@@ -1,22 +1,21 @@
 import { NestFactory } from '@nestjs/core';
 import { ApiGatewayModule } from './api-gateway.module';
-import { ConfigService } from '@shared/config';
+import { ConfigModule, ConfigService } from '@shared/config';
 import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
-  const appContext =
-    await NestFactory.createApplicationContext(ApiGatewayModule);
-  const configService = appContext.get(ConfigService);
+  const configCtx = await NestFactory.createApplicationContext(ConfigModule);
+  const configService = configCtx.get(ConfigService);
 
-  const apiGatewayConfig = configService.API_GATEWAY_CONFIG;
+  const apiGatewayPort = configService.API_GATEWAY_CONFIG;
 
-  console.log('API Gateway running on port:', apiGatewayConfig);
-
-  appContext.close();
+  configCtx.close();
 
   const app = await NestFactory.create(ApiGatewayModule);
-  app.use(cookieParser())
+  app.use(cookieParser());
 
-  await app.listen(apiGatewayConfig);
+  await app.listen(apiGatewayPort, () =>
+    console.log(`Gateway running in http://localhost:${apiGatewayPort}`),
+  );
 }
 bootstrap();
