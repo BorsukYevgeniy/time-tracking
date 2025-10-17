@@ -17,7 +17,12 @@ import { USER_CLIENT } from '../users/constants';
         useFactory: (configService: ConfigService) => configService.USER_CONFIG,
       },
     ]),
-    JwtModule
+    JwtModule.registerAsync({
+      global: true,
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => configService.JWT_CONFIG,
+    }),
   ],
   controllers: [AuthController],
   providers: [AuthService],

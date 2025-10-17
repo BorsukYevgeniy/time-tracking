@@ -5,12 +5,15 @@ import {
   Res,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { LoginDto } from './dto/login.dto';
 
-import { CreateUserDto } from '@contracts/users';
+import { CreateUserDto, Role } from '@contracts/users';
+import { RolesGuard } from './guard/roles.guard';
+import { Roles } from './decorator/roles.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -42,6 +45,8 @@ export class AuthController {
   }
 
   @Post('logout')
+  @Roles(Role.USER)
+  @UseGuards(RolesGuard)
   @HttpCode(HttpStatus.OK)
   async logout(@Res() res: Response) {
     res.clearCookie('accessToken').sendStatus(200);

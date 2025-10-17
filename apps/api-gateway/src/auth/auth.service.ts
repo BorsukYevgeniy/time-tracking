@@ -2,7 +2,6 @@ import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { USER_CLIENT } from '../users/constants';
 import { firstValueFrom } from 'rxjs';
-
 import { hash, compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from './dto/login.dto';
@@ -16,17 +15,17 @@ export class AuthService {
   ) {}
 
   private async generateToken(user: User): Promise<string> {
-    return await this.jwtService.signAsync({
-      id: user.id,
-    });
+    return await this.jwtService.signAsync(
+      {
+        id: user.id,
+        role: user.role
+      },
+    );
   }
 
   async register(dto: CreateUserDto): Promise<string> {
     const user: User | null = await firstValueFrom(
-      this.userClient.send(
-        USER_PATTERNS.FIND_BY_EMAIL,
-        dto.email,
-      ),
+      this.userClient.send(USER_PATTERNS.FIND_BY_EMAIL, dto.email),
     );
 
     if (user) {
