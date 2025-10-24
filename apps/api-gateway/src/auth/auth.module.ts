@@ -8,7 +8,13 @@ import { USER_CLIENT } from '../users/constants';
 
 @Module({
   imports: [
-    ConfigModule,
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        ...configService.JWT_CONFIG,
+      }),
+    }),
     ClientsModule.registerAsync([
       {
         imports: [ConfigModule],
@@ -17,12 +23,6 @@ import { USER_CLIENT } from '../users/constants';
         useFactory: (configService: ConfigService) => configService.USER_CONFIG,
       },
     ]),
-    JwtModule.registerAsync({
-      global: true,
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => configService.JWT_CONFIG,
-    }),
   ],
   controllers: [AuthController],
   providers: [AuthService],

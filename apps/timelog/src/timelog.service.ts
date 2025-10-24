@@ -8,6 +8,10 @@ export class TimelogService {
     private readonly timelogRepository: TimelogRepository,
   ) {}
 
+  async findLogs(userId: number, startDate: Date, endDate: Date): Promise<Timelog[]>{
+    return await this.timelogRepository.findLogs(userId, startDate, endDate)
+  }
+
   async start(userId: number): Promise<Timelog> {
     return await this.timelogRepository.start(userId)
   }

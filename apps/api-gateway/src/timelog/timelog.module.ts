@@ -8,9 +8,14 @@ import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
-    ConfigModule,
-    JwtModule,
-    ClientsModule.registerAsync([ 
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        ...configService.JWT_CONFIG,
+      }),
+    }),
+    ClientsModule.registerAsync([
       {
         imports: [ConfigModule],
         inject: [ConfigService],
@@ -20,8 +25,7 @@ import { JwtModule } from '@nestjs/jwt';
       },
     ]),
   ],
-  controllers: [TimelogController] ,
+  controllers: [TimelogController],
   providers: [TimelogService],
-  
 })
 export class TimelogModule {}

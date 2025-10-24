@@ -16,7 +16,6 @@ import { Roles } from '../decorator/roles.decorator';
 export class RolesGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
     private readonly reflector: Reflector,
   ) {}
 
@@ -28,9 +27,7 @@ export class RolesGuard implements CanActivate {
     if (!token) throw new UnauthorizedException();
 
     try {
-      const payload = await this.jwtService.verifyAsync<JwtPayload>(token, {
-        secret: this.configService.JWT_CONFIG.secret,
-      });
+      const payload = await this.jwtService.verifyAsync<JwtPayload>(token)
 
       const requiredRole = this.reflector.get(Roles, context.getHandler());
 

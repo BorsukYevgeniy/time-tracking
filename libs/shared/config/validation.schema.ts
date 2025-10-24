@@ -6,9 +6,6 @@ export const validationSchema = joi.object({
   JWT_SECRET: joi.string().required(),
   JWT_EXPIRATION_TIME: joi.string().pattern(/^\d+\s*(s|m|h|d|w|y)$/i).required(),
 
-  // REPORT CONFIGURATION
-  REPORT_PORT: joi.number().port().default(3003).required(),
-
   // TIMELOG CONFIGURATION
   TIMELOG_PORT: joi.number().port().default(3002).required(),
 

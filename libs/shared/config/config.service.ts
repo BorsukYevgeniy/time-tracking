@@ -27,19 +27,6 @@ export class ConfigService {
     };
   }
 
-  get AUTH_CONFIG(): ClientOptions {
-    return {
-      options: { port: this.nestConfigService.get<number>('AUTH_PORT') },
-      transport: Transport.TCP,
-    };
-  }
-
-  get REPORT_CONFIG(): ClientOptions {
-    return {
-      options: { port: this.nestConfigService.get<number>('REPORT_PORT') },
-      transport: Transport.TCP,
-    };
-  }
 
   get TIMELOG_CONFIG(): ClientOptions {
     return {

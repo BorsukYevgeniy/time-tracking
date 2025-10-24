@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Timelog } from './timelog.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 
 @Injectable()
 export class TimelogRepository {
@@ -9,6 +9,10 @@ export class TimelogRepository {
     @InjectRepository(Timelog)
     private readonly timelogRepository: Repository<Timelog>,
   ) {}
+
+  async findLogs(userId: number, startDate: Date, endDate: Date): Promise<Timelog[]>{
+    return await this.timelogRepository.find({where: {userId, start: Between(startDate, endDate)}})
+  }
 
   async start(userId: number): Promise<Timelog> {
     return await this.timelogRepository.save({

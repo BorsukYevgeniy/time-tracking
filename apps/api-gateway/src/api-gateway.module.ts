@@ -3,24 +3,15 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { TimelogModule } from './timelog/timelog.module';
 import { ReportModule } from './report/report.module';
-import { ConfigModule, ConfigService } from '@shared/config';
-import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [
-    UsersModule,
-    AuthModule,
-    TimelogModule,
+  imports:[
     ReportModule,
+    UsersModule,
+    TimelogModule,
     ConfigModule,
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        ...configService.JWT_CONFIG,
-        global: true,
-      }),
-    }),
+    AuthModule,
   ],
 })
 export class ApiGatewayModule {}

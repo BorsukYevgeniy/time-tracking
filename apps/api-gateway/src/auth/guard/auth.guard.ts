@@ -14,7 +14,6 @@ import { JwtPayload } from '../../types/jwt-payload.type';
 export class AuthGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -25,9 +24,7 @@ export class AuthGuard implements CanActivate {
     if (!token) throw new UnauthorizedException();
 
     try {
-      const payload = await this.jwtService.verifyAsync<JwtPayload>(token, {
-        secret: this.configService.JWT_CONFIG.secret,
-      });
+      const payload = await this.jwtService.verifyAsync<JwtPayload>(token)
 
       req.user = payload;
       return true;
