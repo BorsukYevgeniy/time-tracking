@@ -11,9 +11,8 @@ import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { LoginDto } from './dto/login.dto';
 
-import { CreateUserDto, Role } from '@contracts/users';
-import { RolesGuard } from './guard/roles.guard';
-import { Roles } from './decorator/roles.decorator';
+import { CreateUserDto } from '@contracts/users';
+import { AuthGuard } from './guard/auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -28,7 +27,7 @@ export class AuthController {
         maxAge: 60 * 60 * 1000,
         httpOnly: true,
       })
-      .sendStatus(201);
+      .status(201);
   }
 
   @Post('login')
@@ -41,14 +40,13 @@ export class AuthController {
         maxAge: 60 * 60 * 1000,
         httpOnly: true,
       })
-      .sendStatus(200);
+      .status(200);
   }
 
   @Post('logout')
-  @Roles(Role.USER)
-  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.OK)
   async logout(@Res() res: Response) {
-    res.clearCookie('accessToken').sendStatus(200);
+    res.clearCookie('accessToken').status(200);
   }
 }
