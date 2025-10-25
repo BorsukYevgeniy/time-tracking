@@ -27,7 +27,8 @@ export class AuthController {
         maxAge: 60 * 60 * 1000,
         httpOnly: true,
       })
-      .status(201);
+      .status(201)
+      .end();
   }
 
   @Post('login')
@@ -40,13 +41,13 @@ export class AuthController {
         maxAge: 60 * 60 * 1000,
         httpOnly: true,
       })
-      .status(200);
+      .status(200).end();
   }
 
   @Post('logout')
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.OK)
   async logout(@Res() res: Response) {
-    res.clearCookie('accessToken').status(200);
+    res.clearCookie('accessToken').status(200).end();
   }
 }
