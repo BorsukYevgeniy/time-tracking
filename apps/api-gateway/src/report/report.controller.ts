@@ -1,13 +1,19 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, UseGuards, Query } from '@nestjs/common';
 import { ReportService } from './report.service';
 import { AuthGuard } from '../auth/guard/auth.guard';
 import { JwtPayload } from '../types/jwt-payload.type';
 import { User } from '../decorators/user.decorator';
+import { SearchTimelogsDto } from '@contracts/timelog';
 
 @Controller('report')
 @UseGuards(AuthGuard)
 export class ReportController {
   constructor(private readonly reportService: ReportService) {}
+
+  @Get()
+  async getReport(@User() user: JwtPayload, @Query() searchTimelogsDto: SearchTimelogsDto){
+    return this.reportService.generateReport(user.id, searchTimelogsDto);
+  }
 
   @Get('daily')
   async getDailyReport(@User() user: JwtPayload) {
