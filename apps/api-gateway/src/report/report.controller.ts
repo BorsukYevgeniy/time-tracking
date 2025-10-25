@@ -1,8 +1,8 @@
 import { Controller, Get, UseGuards, Query } from '@nestjs/common';
 import { ReportService } from './report.service';
 import { AuthGuard } from '../auth/guard/auth.guard';
-import { JwtPayload } from '../types/jwt-payload.type';
-import { User } from '../decorators/user.decorator';
+import { JwtPayload } from '../common/types/jwt-payload.type';
+import { User } from '../common/decorators/user.decorator';
 import { DateDto } from '@contracts/timelog';
 
 @Controller('report')

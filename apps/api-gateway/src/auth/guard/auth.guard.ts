@@ -5,10 +5,10 @@ import {
   UnauthorizedException,
   ForbiddenException,
 } from '@nestjs/common';
-import { AuthRequest } from '../../types/auth-request.type';
+import { AuthRequest } from '../../common/types/auth-request.type';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@shared/config';
-import { JwtPayload } from '../../types/jwt-payload.type';
+import { JwtPayload } from '../../common/types/jwt-payload.type';
 
 @Injectable()
 export class AuthGuard implements CanActivate {

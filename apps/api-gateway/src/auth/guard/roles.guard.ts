@@ -6,8 +6,8 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AuthRequest } from '../../types/auth-request.type';
-import { JwtPayload } from '../../types/jwt-payload.type';
+import { AuthRequest } from '../../common/types/auth-request.type';
+import { JwtPayload } from '../../common/types/jwt-payload.type';
 import { ConfigService } from '@shared/config';
 import { Reflector } from '@nestjs/core';
 import { Roles } from '../decorator/roles.decorator';

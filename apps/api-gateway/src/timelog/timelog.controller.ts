@@ -7,7 +7,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { TimelogService } from './timelog.service';
-import { AuthRequest } from '../types/auth-request.type';
+import { AuthRequest } from '../common/types/auth-request.type';
 import { AuthGuard } from '../auth/guard/auth.guard';
 import { Observable } from 'rxjs';
 import { Timelog } from '@contracts/timelog';
