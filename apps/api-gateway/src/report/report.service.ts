@@ -4,8 +4,11 @@ import { TIMELOG_CLIENT } from '../timelog/constants';
 import {
   TIMELOG_PATTERNS,
   Timelog,
+  DateDto,
   SearchTimelogsDto,
 } from '@contracts/timelog';
+import { Report } from './types/report.type';
+
 import { firstValueFrom } from 'rxjs';
 
 @Injectable()
@@ -27,7 +30,10 @@ export class ReportService {
     return totalTimeMs / (1000 * 60 * 60);
   }
 
-  async generateReport(userId: number, searchTimelogsDto: SearchTimelogsDto) {
+  async generateReport(
+    userId: number,
+    searchTimelogsDto: DateDto,
+  ): Promise<Report> {
     const { endDate, startDate } = searchTimelogsDto;
 
     const [startDay, startMonth, startYear] = startDate
@@ -43,12 +49,15 @@ export class ReportService {
     const start = new Date(startYear, startMonth - 1, startDay, 0, 0, 0, 1);
     const end = new Date(endYear, endMonth - 1, endDay, 23, 59, 59, 999);
 
-    const timelogs: Timelog[] = await firstValueFrom(
-      this.timelogClient.send<Timelog[]>(TIMELOG_PATTERNS.FIND_LOGS, {
-        userId,
-        startDate: start,
-        endDate: end,
-      }),
+    const timelogs = await firstValueFrom(
+      this.timelogClient.send<Timelog[], SearchTimelogsDto>(
+        TIMELOG_PATTERNS.FIND_LOGS,
+        {
+          userId,
+          startDate: start,
+          endDate: end,
+        },
+      ),
     );
 
     return {
@@ -57,7 +66,7 @@ export class ReportService {
     };
   }
 
-  async generateDailyReport(userId: number) {
+  async generateDailyReport(userId: number): Promise<Report> {
     const now = new Date();
 
     const startDate = new Date(
@@ -79,18 +88,21 @@ export class ReportService {
       999,
     );
 
-    const timelogs: Timelog[] = await firstValueFrom(
-      this.timelogClient.send(TIMELOG_PATTERNS.FIND_LOGS, {
-        userId,
-        startDate,
-        endDate,
-      }),
+    const timelogs = await firstValueFrom(
+      this.timelogClient.send<Timelog[], SearchTimelogsDto>(
+        TIMELOG_PATTERNS.FIND_LOGS,
+        {
+          userId,
+          startDate,
+          endDate,
+        },
+      ),
     );
 
-    return { totalTime: await this.getTotalHours(timelogs), timelogs };
+    return { totalHours: await this.getTotalHours(timelogs), timelogs };
   }
 
-  async generateMonthlyReport(userId: number) {
+  async generateMonthlyReport(userId: number): Promise<Report> {
     const now = new Date();
 
     const startDate = new Date(
@@ -112,30 +124,38 @@ export class ReportService {
       999,
     );
 
-    const timelogs: Timelog[] = await firstValueFrom(
-      this.timelogClient.send<Timelog[]>(TIMELOG_PATTERNS.FIND_LOGS, {
-        userId,
-        startDate,
-        endDate,
-      }),
+  console.log(startDate,endDate)
+
+    const timelogs = await firstValueFrom(
+      this.timelogClient.send<Timelog[], SearchTimelogsDto>(
+        TIMELOG_PATTERNS.FIND_LOGS,
+        {
+          userId,
+          startDate,
+          endDate,
+        },
+      ),
     );
 
-    return { totalTime: await this.getTotalHours(timelogs), timelogs };
+    return { totalHours: await this.getTotalHours(timelogs), timelogs };
   }
 
-  async generateYearlyReport(userId: number) {
+  async generateYearlyReport(userId: number): Promise<Report> {
     const now = new Date();
     const startDate = new Date(now.getFullYear(), 0, 1, 0, 0, 0, 0);
     const endDate = new Date(now.getFullYear(), 11, 31, 23, 59, 59, 999);
 
-    const timelogs: Timelog[] = await firstValueFrom(
-      this.timelogClient.send<Timelog[]>(TIMELOG_PATTERNS.FIND_LOGS, {
-        userId,
-        startDate,
-        endDate,
-      }),
+    const timelogs = await firstValueFrom(
+      this.timelogClient.send<Timelog[], SearchTimelogsDto>(
+        TIMELOG_PATTERNS.FIND_LOGS,
+        {
+          userId,
+          startDate,
+          endDate,
+        },
+      ),
     );
 
-    return { totalTime: await this.getTotalHours(timelogs), timelogs };
+    return { totalHours: await this.getTotalHours(timelogs), timelogs };
   }
 }

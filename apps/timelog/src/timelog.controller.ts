@@ -2,15 +2,18 @@ import { Controller, ParseIntPipe } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { TimelogService } from './timelog.service';
 
-import { SearchTimelogsDto, TIMELOG_PATTERNS } from '@contracts/timelog';
+import {
+  TIMELOG_PATTERNS,
+  SearchTimelogsDto,
+} from '@contracts/timelog';
 
 @Controller()
 export class TimelogController {
   constructor(private readonly timelogService: TimelogService) {}
 
   @MessagePattern(TIMELOG_PATTERNS.FIND_LOGS)
-  async findLogs(@Payload() data: SearchTimelogsDto & {userId: number}) {
-    return await this.timelogService.findLogs(data.userId,data.startDate, data.endDate);
+  async findLogs(@Payload() searchDto: SearchTimelogsDto) {
+    return await this.timelogService.findLogs(searchDto);
   }
 
   @MessagePattern(TIMELOG_PATTERNS.START)
@@ -22,5 +25,4 @@ export class TimelogController {
   async end(@Payload(ParseIntPipe) userId: number) {
     return await this.timelogService.end(userId);
   }
-
 }
