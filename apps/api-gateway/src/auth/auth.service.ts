@@ -1,6 +1,6 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { USER_CLIENT } from '../users/constants';
+import { USER_CLIENT } from '@contracts/users';
 import { firstValueFrom } from 'rxjs';
 import { hash, compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';

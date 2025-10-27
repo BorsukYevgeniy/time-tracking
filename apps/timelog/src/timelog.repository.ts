@@ -11,6 +11,13 @@ export class TimelogRepository {
     private readonly timelogRepository: Repository<Timelog>,
   ) {}
 
+  async getLastTimelog(userId: number) {
+    return await this.timelogRepository.findOne({
+      where: { userId },
+      order: { start: 'DESC' },
+    });
+  }
+
   async findLogs(searchDto: SearchTimelogsDto): Promise<Timelog[]> {
     return await this.timelogRepository.find({
       where: {

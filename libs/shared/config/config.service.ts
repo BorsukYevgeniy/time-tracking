@@ -4,6 +4,7 @@ import { ConfigService as NestConfigService } from '@nestjs/config';
 import { ClientOptions, Transport } from '@nestjs/microservices';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { JwtModuleOptions } from '@nestjs/jwt';
+import { MailerOptions } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class ConfigService {
@@ -26,7 +27,6 @@ export class ConfigService {
       database: this.nestConfigService.get<string>('USER_DB_NAME'),
     };
   }
-
 
   get TIMELOG_CONFIG(): ClientOptions {
     return {
@@ -53,7 +53,32 @@ export class ConfigService {
   get JWT_CONFIG(): JwtModuleOptions {
     return {
       secret: this.nestConfigService.get<string>('JWT_SECRET'),
-      signOptions: { expiresIn: this.nestConfigService.get<string>('JWT_EXPIRATION_TIME') },
+      signOptions: {
+        expiresIn: this.nestConfigService.get<string>('JWT_EXPIRATION_TIME'),
+      },
+    };
+  }
+
+  get NOTIFICATION_CONFIG(): ClientOptions {
+    return {
+      options: { port: this.nestConfigService.get<number>('MAILER_PORT') },
+      transport: Transport.TCP,
+    };
+  }
+
+  get MAIL_CONFIG(): MailerOptions {
+    return {
+      transport: {
+        host: this.nestConfigService.get<string>('SMTP_HOST'),
+        port: this.nestConfigService.get<number>('SMTP_PORT'),
+        auth: {
+          user: this.nestConfigService.get<string>('SMTP_USER'),
+          pass: this.nestConfigService.get<string>('SMTP_PASSWORD'),
+        },
+      },
+      defaults: {
+        from: this.nestConfigService.get<string>('SMTP_USER'),
+      },
     };
   }
 }

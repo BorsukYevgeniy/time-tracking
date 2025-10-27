@@ -11,6 +11,12 @@ import {
 export class TimelogController {
   constructor(private readonly timelogService: TimelogService) {}
 
+
+  @MessagePattern(TIMELOG_PATTERNS.FIND_LAST_TIMELOG)
+  async getLastTimelog(@Payload(ParseIntPipe) userId: number){
+    return await this.timelogService.getLastTimelog(userId);
+  }
+
   @MessagePattern(TIMELOG_PATTERNS.FIND_LOGS)
   async findLogs(@Payload() searchDto: SearchTimelogsDto) {
     return await this.timelogService.findLogs(searchDto);

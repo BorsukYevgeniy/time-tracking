@@ -4,7 +4,7 @@ import { AuthController } from './auth.controller';
 import { ClientsModule } from '@nestjs/microservices';
 import { ConfigModule, ConfigService } from '@shared/config';
 import { JwtModule } from '@nestjs/jwt';
-import { USER_CLIENT } from '../users/constants';
+import { USER_CLIENT } from '@contracts/users';
 
 @Module({
   imports: [

@@ -3,7 +3,7 @@ import { ReportService } from './report.service';
 import { ReportController } from './report.controller';
 import { ClientsModule } from '@nestjs/microservices';
 import { ConfigModule, ConfigService } from '@shared/config';
-import { TIMELOG_CLIENT } from '../timelog/constants';
+import { TIMELOG_CLIENT } from '@contracts/timelog';
 import { JwtModule } from '@nestjs/jwt';
 
 @Module({

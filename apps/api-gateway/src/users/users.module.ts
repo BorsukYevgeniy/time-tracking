@@ -3,7 +3,7 @@ import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 
 import { ClientsModule } from '@nestjs/microservices';
-import { USER_CLIENT } from './constants';
+import { USER_CLIENT } from '@contracts/users';
 import { ConfigService, ConfigModule } from '@shared/config';
 
 @Module({
@@ -13,7 +13,7 @@ import { ConfigService, ConfigModule } from '@shared/config';
         imports: [ConfigModule],
         inject: [ConfigService],
         name: USER_CLIENT,
-        useFactory: async (configService: ConfigService) =>
+        useFactory: (configService: ConfigService) =>
           configService.USER_CONFIG,
       },
     ]),

@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { TIMELOG_CLIENT } from './constants';
+import { TIMELOG_CLIENT } from '@contracts/timelog';
 import { Timelog, TIMELOG_PATTERNS } from '@contracts/timelog';
 import { Observable } from 'rxjs';
 

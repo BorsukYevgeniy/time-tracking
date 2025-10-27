@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TimelogService } from './timelog.service';
 import { ClientsModule } from '@nestjs/microservices';
-import { TIMELOG_CLIENT } from './constants';
+import { TIMELOG_CLIENT } from '@contracts/timelog';
 import { ConfigService, ConfigModule } from '@shared/config';
 import { TimelogController } from './timelog.controller';
 import { JwtModule } from '@nestjs/jwt';
