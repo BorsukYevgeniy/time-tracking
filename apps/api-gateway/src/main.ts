@@ -12,6 +12,7 @@ async function bootstrap() {
   configCtx.close();
 
   const app = await NestFactory.create(ApiGatewayModule);
+  app.setGlobalPrefix('api')
   app.use(cookieParser());
 
   await app.listen(apiGatewayPort, () =>
