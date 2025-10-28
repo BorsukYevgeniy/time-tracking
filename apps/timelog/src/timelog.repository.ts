@@ -8,22 +8,22 @@ import { SearchTimelogsDto } from '@contracts/timelog';
 export class TimelogRepository {
   constructor(
     @InjectRepository(Timelog)
-    private readonly timelogRepository: Repository<Timelog>,
+    private readonly repo: Repository<Timelog>,
   ) {}
 
   async finishAllLogs(){
-    return await this.timelogRepository.updateAll({end: new Date()})
+    return await this.repo.updateAll({end: new Date()})
   }
 
   async getLastTimelog(userId: number) {
-    return await this.timelogRepository.findOne({
+    return await this.repo.findOne({
       where: { userId },
       order: { start: 'DESC' },
     });
   }
 
   async findLogs(searchDto: SearchTimelogsDto): Promise<Timelog[]> {
-    return await this.timelogRepository.find({
+    return await this.repo.find({
       where: {
         userId: searchDto.userId,
         start: Between(searchDto.startDate, searchDto.endDate),
@@ -32,7 +32,7 @@ export class TimelogRepository {
   }
 
   async start(userId: number): Promise<Timelog> {
-    return await this.timelogRepository.save({
+    return await this.repo.save({
       start: new Date(),
       end: null,
       userId,
@@ -40,7 +40,7 @@ export class TimelogRepository {
   }
 
   async end(userId: number): Promise<Timelog> {
-    const timelog = await this.timelogRepository
+    const timelog = await this.repo
       .createQueryBuilder('timelog')
       .where('timelog.userId = :userId', { userId })
       .andWhere('timelog.end IS NULL')
@@ -52,7 +52,7 @@ export class TimelogRepository {
 
     const endDate = new Date();
 
-    await this.timelogRepository
+    await this.repo
       .createQueryBuilder()
       .update(Timelog)
       .set({ end: endDate })
