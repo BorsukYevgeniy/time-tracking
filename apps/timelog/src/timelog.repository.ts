@@ -11,6 +11,10 @@ export class TimelogRepository {
     private readonly timelogRepository: Repository<Timelog>,
   ) {}
 
+  async finishAllLogs(){
+    return await this.timelogRepository.updateAll({end: new Date()})
+  }
+
   async getLastTimelog(userId: number) {
     return await this.timelogRepository.findOne({
       where: { userId },

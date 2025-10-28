@@ -7,6 +7,10 @@ import { SearchTimelogsDto } from '@contracts/timelog';
 export class TimelogService {
   constructor(private readonly timelogRepository: TimelogRepository) {}
 
+  async finishAllLogs() {
+    return await this.timelogRepository.finishAllLogs();
+  }
+
   async getLastTimelog(userId: number): Promise<Timelog | null> {
     return await this.timelogRepository.getLastTimelog(userId);
   }
