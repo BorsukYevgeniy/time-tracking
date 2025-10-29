@@ -1,12 +1,12 @@
-import { Module } from '@nestjs/common';
-import { MailerModule } from '@nestjs-modules/mailer';
-import { ConfigModule, ConfigService } from '@shared/config';
-import { NotificationService } from './notification.service';
-import { ScheduleModule } from '@nestjs/schedule';
-import { NotificationScheduler } from './notification.scheduler';
-import { ClientsModule } from '@nestjs/microservices';
-import { USER_CLIENT } from '@contracts/users';
 import { TIMELOG_CLIENT } from '@contracts/timelog';
+import { USER_CLIENT } from '@contracts/users';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { Module } from '@nestjs/common';
+import { ClientsModule } from '@nestjs/microservices';
+import { ScheduleModule } from '@nestjs/schedule';
+import { ConfigModule, ConfigService } from '@shared/config';
+import { NotificationScheduler } from './notification.scheduler';
+import { NotificationService } from './notification.service';
 
 @Module({
   imports: [
@@ -22,13 +22,12 @@ import { TIMELOG_CLIENT } from '@contracts/timelog';
         name: USER_CLIENT,
         useFactory: (configService: ConfigService) => configService.USER_CONFIG,
       },
-    ]),
-    ClientsModule.registerAsync([
       {
         imports: [ConfigModule],
         inject: [ConfigService],
         name: TIMELOG_CLIENT,
-        useFactory: (configService: ConfigService) => configService.TIMELOG_CONFIG,
+        useFactory: (configService: ConfigService) =>
+          configService.TIMELOG_CONFIG,
       },
     ]),
     ScheduleModule.forRoot(),
