@@ -27,4 +27,15 @@ export class TimelogService {
       id,
     );
   }
+
+  getLogsByUserId(userId: number): Observable<Timelog[]> {
+    return this.timelogClient.send<Timelog[], number>(
+      TIMELOG_PATTERNS.GET_LOGS_BY_USER_ID,
+      userId,
+    );
+  }
+
+  getAllLogs() {
+    return this.timelogClient.send<Timelog[]>(TIMELOG_PATTERNS.GET_ALL, {});
+  }
 }

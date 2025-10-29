@@ -8,6 +8,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
@@ -28,6 +29,17 @@ export class TimelogController {
   @UseGuards(RolesGuard)
   getById(@Param('id', ParseIntPipe) id: number): Observable<Timelog> {
     return this.timelogService.getById(id);
+  }
+
+  @Get()
+  @RequieredRoles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  getLogsByUserId(
+    @Query('userId', new ParseIntPipe({ optional: true })) userId: number,
+  ): Observable<Timelog[]> {
+    if (userId) return this.timelogService.getLogsByUserId(userId);
+
+    return this.timelogService.getAllLogs();
   }
 
   @Post('start')

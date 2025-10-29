@@ -7,8 +7,16 @@ import { TimelogRepository } from './timelog.repository';
 export class TimelogService {
   constructor(private readonly timelogRepository: TimelogRepository) {}
 
+  async getAll(): Promise<Timelog[]> {
+    return await this.timelogRepository.getAll();
+  }
+
   async getById(id: number): Promise<Timelog> {
     return await this.timelogRepository.getById(id);
+  }
+
+  async getLogsByUserId(userId: number) {
+    return await this.timelogRepository.getLogsByUserId(userId);
   }
 
   async finishAllLogs() {

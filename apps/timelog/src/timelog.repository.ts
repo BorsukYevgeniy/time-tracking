@@ -11,6 +11,14 @@ export class TimelogRepository {
     private readonly repo: Repository<Timelog>,
   ) {}
 
+  async getAll(): Promise<Timelog[]> {
+    return await this.repo.find();
+  }
+
+  async getLogsByUserId(userId: number): Promise<Timelog[]> {
+    return await this.repo.find({ where: { userId } });
+  }
+
   async getById(id: number): Promise<Timelog> {
     return await this.repo.findOne({ where: { id } });
   }

@@ -12,9 +12,21 @@ import {
 export class TimelogController {
   constructor(private readonly timelogService: TimelogService) {}
 
+  @MessagePattern(TIMELOG_PATTERNS.GET_ALL)
+  async getAll(): Promise<Timelog[]> {
+    return await this.timelogService.getAll();
+  }
+
   @MessagePattern(TIMELOG_PATTERNS.GET_BY_ID)
   async getById(@Payload(ParseIntPipe) id: number): Promise<Timelog> {
     return await this.timelogService.getById(id);
+  }
+
+  @MessagePattern(TIMELOG_PATTERNS.GET_LOGS_BY_USER_ID)
+  async getLogsByUserId(
+    @Payload(ParseIntPipe) userId: number,
+  ): Promise<Timelog[]> {
+    return await this.timelogService.getLogsByUserId(userId);
   }
 
   @MessagePattern(TIMELOG_PATTERNS.FIND_LAST_TIMELOG)
