@@ -23,12 +23,12 @@ export class TimelogService {
     return await this.timelogRepository.finishAllLogs();
   }
 
-  async getLastTimelog(userId: number): Promise<Timelog | null> {
-    return await this.timelogRepository.getLastTimelog(userId);
+  async getLastUserTimelog(userId: number): Promise<Timelog | null> {
+    return await this.timelogRepository.getLastUserTimelog(userId);
   }
 
-  async findLogs(searchDto: SearchTimelogsDto): Promise<Timelog[]> {
-    return await this.timelogRepository.findLogs(searchDto);
+  async searchLogs(searchDto: SearchTimelogsDto): Promise<Timelog[]> {
+    return await this.timelogRepository.searchLogs(searchDto);
   }
 
   async start(userId: number): Promise<Timelog> {

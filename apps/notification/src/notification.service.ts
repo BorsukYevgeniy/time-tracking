@@ -1,8 +1,8 @@
-import { Injectable, Inject } from '@nestjs/common';
-import { MailerService } from '@nestjs-modules/mailer';
-import { ClientProxy } from '@nestjs/microservices';
+import { TIMELOG_CLIENT, TIMELOG_PATTERNS, Timelog } from '@contracts/timelog';
 import { USER_CLIENT, USER_PATTERNS, User } from '@contracts/users';
-import { TIMELOG_CLIENT, Timelog, TIMELOG_PATTERNS } from '@contracts/timelog';
+import { MailerService } from '@nestjs-modules/mailer';
+import { Inject, Injectable } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable()
@@ -17,25 +17,29 @@ export class NotificationService {
   async sendMorningReminders() {
     const usersToNotify = await this.getUserWhichNeedMorningNotification();
 
-    await Promise.all(usersToNotify.map(user => 
-      this.sendMail(
-        user.email,
-        'Morning Reminder',
-        'Don\'t forget to start your timelog today!',
-      )
-    ));
+    await Promise.all(
+      usersToNotify.map((user) =>
+        this.sendMail(
+          user.email,
+          'Morning Reminder',
+          "Don't forget to start your timelog today!",
+        ),
+      ),
+    );
   }
 
   async sendEveningReminders() {
     const usersToNotify = await this.getUserWhichNeedEveningNotification();
 
-    await Promise.all(usersToNotify.map(user => 
-      this.sendMail(
-        user.email,
-        'Evening Reminder',
-        'Don\'t forget to end your timelog today!',
-      )
-    ));
+    await Promise.all(
+      usersToNotify.map((user) =>
+        this.sendMail(
+          user.email,
+          'Evening Reminder',
+          "Don't forget to end your timelog today!",
+        ),
+      ),
+    );
   }
 
   private async getUserWhichNeedMorningNotification(): Promise<User[]> {
@@ -44,11 +48,11 @@ export class NotificationService {
     );
 
     const usersToNotify: User[] = [];
-    
+
     for (const user of users) {
       const lastTimelog: Timelog | null = await firstValueFrom(
         this.timelogClient.send<Timelog | null>(
-          TIMELOG_PATTERNS.FIND_LAST_TIMELOG,
+          TIMELOG_PATTERNS.GET_LAST_USER_TIMELOG,
           user.id,
         ),
       );
@@ -72,11 +76,11 @@ export class NotificationService {
     );
 
     const usersToNotify: User[] = [];
-    
+
     for (const user of users) {
       const lastTimelog: Timelog | null = await firstValueFrom(
         this.timelogClient.send<Timelog | null>(
-          TIMELOG_PATTERNS.FIND_LAST_TIMELOG,
+          TIMELOG_PATTERNS.GET_LAST_USER_TIMELOG,
           user.id,
         ),
       );

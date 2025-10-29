@@ -29,16 +29,18 @@ export class TimelogController {
     return await this.timelogService.getLogsByUserId(userId);
   }
 
-  @MessagePattern(TIMELOG_PATTERNS.FIND_LAST_TIMELOG)
-  async getLastTimelog(
+  @MessagePattern(TIMELOG_PATTERNS.GET_LAST_USER_TIMELOG)
+  async getLastUserTimelog(
     @Payload(ParseIntPipe) userId: number,
   ): Promise<Timelog> {
-    return await this.timelogService.getLastTimelog(userId);
+    return await this.timelogService.getLastUserTimelog(userId);
   }
 
-  @MessagePattern(TIMELOG_PATTERNS.FIND_LOGS)
-  async findLogs(@Payload() searchDto: SearchTimelogsDto): Promise<Timelog[]> {
-    return await this.timelogService.findLogs(searchDto);
+  @MessagePattern(TIMELOG_PATTERNS.SEARCH_LOGS)
+  async searchLogs(
+    @Payload() searchDto: SearchTimelogsDto,
+  ): Promise<Timelog[]> {
+    return await this.timelogService.searchLogs(searchDto);
   }
 
   @MessagePattern(TIMELOG_PATTERNS.START)

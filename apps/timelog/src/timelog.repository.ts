@@ -27,14 +27,14 @@ export class TimelogRepository {
     return await this.repo.updateAll({ end: new Date() });
   }
 
-  async getLastTimelog(userId: number) {
+  async getLastUserTimelog(userId: number) {
     return await this.repo.findOne({
       where: { userId },
       order: { start: 'DESC' },
     });
   }
 
-  async findLogs(searchDto: SearchTimelogsDto): Promise<Timelog[]> {
+  async searchLogs(searchDto: SearchTimelogsDto): Promise<Timelog[]> {
     return await this.repo.find({
       where: {
         userId: searchDto.userId,

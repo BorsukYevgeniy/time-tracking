@@ -1,12 +1,12 @@
-import { Injectable, Inject } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
-import { TIMELOG_CLIENT } from '@contracts/timelog';
 import {
-  TIMELOG_PATTERNS,
-  Timelog,
   DateDto,
   SearchTimelogsDto,
+  TIMELOG_CLIENT,
+  TIMELOG_PATTERNS,
+  Timelog,
 } from '@contracts/timelog';
+import { Inject, Injectable } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 import { Report } from './types/report.type';
 
 import { firstValueFrom } from 'rxjs';
@@ -51,7 +51,7 @@ export class ReportService {
 
     const timelogs = await firstValueFrom(
       this.timelogClient.send<Timelog[], SearchTimelogsDto>(
-        TIMELOG_PATTERNS.FIND_LOGS,
+        TIMELOG_PATTERNS.SEARCH_LOGS,
         {
           userId,
           startDate: start,
@@ -90,7 +90,7 @@ export class ReportService {
 
     const timelogs = await firstValueFrom(
       this.timelogClient.send<Timelog[], SearchTimelogsDto>(
-        TIMELOG_PATTERNS.FIND_LOGS,
+        TIMELOG_PATTERNS.SEARCH_LOGS,
         {
           userId,
           startDate,
@@ -124,11 +124,11 @@ export class ReportService {
       999,
     );
 
-  console.log(startDate,endDate)
+    console.log(startDate, endDate);
 
     const timelogs = await firstValueFrom(
       this.timelogClient.send<Timelog[], SearchTimelogsDto>(
-        TIMELOG_PATTERNS.FIND_LOGS,
+        TIMELOG_PATTERNS.SEARCH_LOGS,
         {
           userId,
           startDate,
@@ -147,7 +147,7 @@ export class ReportService {
 
     const timelogs = await firstValueFrom(
       this.timelogClient.send<Timelog[], SearchTimelogsDto>(
-        TIMELOG_PATTERNS.FIND_LOGS,
+        TIMELOG_PATTERNS.SEARCH_LOGS,
         {
           userId,
           startDate,
