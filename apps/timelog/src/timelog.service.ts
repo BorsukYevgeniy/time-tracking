@@ -1,11 +1,15 @@
+import { SearchTimelogsDto } from '@contracts/timelog';
 import { Injectable } from '@nestjs/common';
 import { Timelog } from './timelog.entity';
 import { TimelogRepository } from './timelog.repository';
-import { SearchTimelogsDto } from '@contracts/timelog';
 
 @Injectable()
 export class TimelogService {
   constructor(private readonly timelogRepository: TimelogRepository) {}
+
+  async getById(id: number): Promise<Timelog> {
+    return await this.timelogRepository.getById(id);
+  }
 
   async finishAllLogs() {
     return await this.timelogRepository.finishAllLogs();

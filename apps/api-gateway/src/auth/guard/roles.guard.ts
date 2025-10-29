@@ -1,16 +1,15 @@
 import {
-  Injectable,
   CanActivate,
   ExecutionContext,
-  UnauthorizedException,
   ForbiddenException,
+  Injectable,
+  UnauthorizedException,
 } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { AuthRequest } from '../../common/types/auth-request.type';
 import { JwtPayload } from '../../common/types/jwt-payload.type';
-import { ConfigService } from '@shared/config';
-import { Reflector } from '@nestjs/core';
-import { Roles } from '../decorator/roles.decorator';
+import { RequieredRoles } from '../decorator/roles.decorator';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -27,10 +26,12 @@ export class RolesGuard implements CanActivate {
     if (!token) throw new UnauthorizedException();
 
     try {
-      const payload = await this.jwtService.verifyAsync<JwtPayload>(token)
+      const payload = await this.jwtService.verifyAsync<JwtPayload>(token);
 
-      const requiredRole = this.reflector.get(Roles, context.getHandler());
-
+      const requiredRole = this.reflector.get(
+        RequieredRoles,
+        context.getHandler(),
+      );
 
       if (requiredRole !== req.user.role) throw new ForbiddenException();
 

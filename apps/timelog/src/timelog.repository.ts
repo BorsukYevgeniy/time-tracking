@@ -1,8 +1,8 @@
+import { SearchTimelogsDto } from '@contracts/timelog';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Timelog } from './timelog.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, Repository } from 'typeorm';
-import { SearchTimelogsDto } from '@contracts/timelog';
+import { Timelog } from './timelog.entity';
 
 @Injectable()
 export class TimelogRepository {
@@ -11,8 +11,12 @@ export class TimelogRepository {
     private readonly repo: Repository<Timelog>,
   ) {}
 
-  async finishAllLogs(){
-    return await this.repo.updateAll({end: new Date()})
+  async getById(id: number): Promise<Timelog> {
+    return await this.repo.findOne({ where: { id } });
+  }
+
+  async finishAllLogs() {
+    return await this.repo.updateAll({ end: new Date() });
   }
 
   async getLastTimelog(userId: number) {
