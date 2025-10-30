@@ -1,19 +1,17 @@
+import { USER_CLIENT } from '@contracts/users';
 import { Module } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { AuthController } from './auth.controller';
+import { JwtModule } from '@nestjs/jwt';
 import { ClientsModule } from '@nestjs/microservices';
 import { ConfigModule, ConfigService } from '@shared/config';
-import { JwtModule } from '@nestjs/jwt';
-import { USER_CLIENT } from '@contracts/users';
+import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
 
 @Module({
   imports: [
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        ...configService.JWT_CONFIG,
-      }),
+      useFactory: (configService: ConfigService) => configService.JWT_CONFIG,
     }),
     ClientsModule.registerAsync([
       {

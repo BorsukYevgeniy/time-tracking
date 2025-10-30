@@ -1,21 +1,13 @@
-import {
-  DateDto,
-  SearchTimelogsDto,
-  TIMELOG_CLIENT,
-  TIMELOG_PATTERNS,
-  Timelog,
-} from '@contracts/timelog';
-import { Inject, Injectable } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
+import { DateDto, Timelog } from '@contracts/timelog';
+import { Injectable } from '@nestjs/common';
 import { Report } from './types/report.type';
 
 import { firstValueFrom } from 'rxjs';
+import { TimelogService } from '../timelog/timelog.service';
 
 @Injectable()
 export class ReportService {
-  constructor(
-    @Inject(TIMELOG_CLIENT) private readonly timelogClient: ClientProxy,
-  ) {}
+  constructor(private readonly timelogService: TimelogService) {}
 
   private async getTotalHours(timelogs: Timelog[]): Promise<number> {
     const totalTimeMs = timelogs.reduce((acc, tl) => {
@@ -34,30 +26,24 @@ export class ReportService {
     userId: number,
     searchTimelogsDto: DateDto,
   ): Promise<Report> {
-    const { endDate, startDate } = searchTimelogsDto;
+    const { endDate: end, startDate: start } = searchTimelogsDto;
 
-    const [startDay, startMonth, startYear] = startDate
+    const [startDay, startMonth, startYear] = start
       .toString()
       .split('-')
       .map(Number);
 
-    const [endDay, endMonth, endYear] = endDate
-      .toString()
-      .split('-')
-      .map(Number);
+    const [endDay, endMonth, endYear] = end.toString().split('-').map(Number);
 
-    const start = new Date(startYear, startMonth - 1, startDay, 0, 0, 0, 1);
-    const end = new Date(endYear, endMonth - 1, endDay, 23, 59, 59, 999);
+    const startDate = new Date(startYear, startMonth - 1, startDay, 0, 0, 0, 1);
+    const endDate = new Date(endYear, endMonth - 1, endDay, 23, 59, 59, 999);
 
     const timelogs = await firstValueFrom(
-      this.timelogClient.send<Timelog[], SearchTimelogsDto>(
-        TIMELOG_PATTERNS.SEARCH_LOGS,
-        {
-          userId,
-          startDate: start,
-          endDate: end,
-        },
-      ),
+      this.timelogService.searchLogs({
+        userId,
+        startDate,
+        endDate,
+      }),
     );
 
     return {
@@ -89,14 +75,11 @@ export class ReportService {
     );
 
     const timelogs = await firstValueFrom(
-      this.timelogClient.send<Timelog[], SearchTimelogsDto>(
-        TIMELOG_PATTERNS.SEARCH_LOGS,
-        {
-          userId,
-          startDate,
-          endDate,
-        },
-      ),
+      this.timelogService.searchLogs({
+        userId,
+        endDate,
+        startDate,
+      }),
     );
 
     return { totalHours: await this.getTotalHours(timelogs), timelogs };
@@ -123,18 +106,12 @@ export class ReportService {
       59,
       999,
     );
-
-    console.log(startDate, endDate);
-
     const timelogs = await firstValueFrom(
-      this.timelogClient.send<Timelog[], SearchTimelogsDto>(
-        TIMELOG_PATTERNS.SEARCH_LOGS,
-        {
-          userId,
-          startDate,
-          endDate,
-        },
-      ),
+      this.timelogService.searchLogs({
+        userId,
+        endDate,
+        startDate,
+      }),
     );
 
     return { totalHours: await this.getTotalHours(timelogs), timelogs };
@@ -146,14 +123,11 @@ export class ReportService {
     const endDate = new Date(now.getFullYear(), 11, 31, 23, 59, 59, 999);
 
     const timelogs = await firstValueFrom(
-      this.timelogClient.send<Timelog[], SearchTimelogsDto>(
-        TIMELOG_PATTERNS.SEARCH_LOGS,
-        {
-          userId,
-          startDate,
-          endDate,
-        },
-      ),
+      this.timelogService.searchLogs({
+        userId,
+        endDate,
+        startDate,
+      }),
     );
 
     return { totalHours: await this.getTotalHours(timelogs), timelogs };

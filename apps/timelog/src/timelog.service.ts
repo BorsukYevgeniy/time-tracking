@@ -1,5 +1,10 @@
 import { SearchTimelogsDto } from '@contracts/timelog';
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { RpcException } from '@nestjs/microservices';
 import { Timelog } from './timelog.entity';
 import { TimelogRepository } from './timelog.repository';
 
@@ -12,7 +17,11 @@ export class TimelogService {
   }
 
   async getById(id: number): Promise<Timelog> {
-    return await this.timelogRepository.getById(id);
+    const timelog = await this.timelogRepository.getById(id);
+
+    if (!timelog) throw new RpcException(new NotFoundException());
+
+    return timelog;
   }
 
   async getLogsByUserId(userId: number) {
@@ -32,10 +41,24 @@ export class TimelogService {
   }
 
   async start(userId: number): Promise<Timelog> {
+    const lastLog = await this.timelogRepository.getLastUserTimelog(userId);
+    if (lastLog && !lastLog.end) {
+      throw new RpcException(
+        new BadRequestException('User already has an active timelog'),
+      );
+    }
+
     return await this.timelogRepository.start(userId);
   }
 
   async end(userId: number): Promise<Timelog> {
+    const lastLog = await this.timelogRepository.getLastUserTimelog(userId);
+    if (lastLog && lastLog.end && lastLog.start) {
+      throw new RpcException(
+        new BadRequestException('User dont have an active timelog'),
+      );
+    }
+
     return await this.timelogRepository.end(userId);
   }
 }

@@ -1,19 +1,17 @@
-import { Module } from '@nestjs/common';
-import { TimelogService } from './timelog.service';
-import { ClientsModule } from '@nestjs/microservices';
 import { TIMELOG_CLIENT } from '@contracts/timelog';
-import { ConfigService, ConfigModule } from '@shared/config';
-import { TimelogController } from './timelog.controller';
+import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
+import { ClientsModule } from '@nestjs/microservices';
+import { ConfigModule, ConfigService } from '@shared/config';
+import { TimelogController } from './timelog.controller';
+import { TimelogService } from './timelog.service';
 
 @Module({
   imports: [
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        ...configService.JWT_CONFIG,
-      }),
+      useFactory: (configService: ConfigService) => configService.JWT_CONFIG,
     }),
     ClientsModule.registerAsync([
       {
@@ -27,5 +25,6 @@ import { JwtModule } from '@nestjs/jwt';
   ],
   controllers: [TimelogController],
   providers: [TimelogService],
+  exports: [TimelogService],
 })
 export class TimelogModule {}

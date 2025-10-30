@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
+import { UsersService } from './users.service';
 
-import { ClientsModule } from '@nestjs/microservices';
 import { USER_CLIENT } from '@contracts/users';
-import { ConfigService, ConfigModule } from '@shared/config';
+import { JwtModule } from '@nestjs/jwt';
+import { ClientsModule } from '@nestjs/microservices';
+import { ConfigModule, ConfigService } from '@shared/config';
 
 @Module({
   imports: [
@@ -13,10 +14,14 @@ import { ConfigService, ConfigModule } from '@shared/config';
         imports: [ConfigModule],
         inject: [ConfigService],
         name: USER_CLIENT,
-        useFactory: (configService: ConfigService) =>
-          configService.USER_CONFIG,
+        useFactory: (configService: ConfigService) => configService.USER_CONFIG,
       },
     ]),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => configService.JWT_CONFIG,
+    }),
   ],
   providers: [UsersService],
   controllers: [UsersController],
