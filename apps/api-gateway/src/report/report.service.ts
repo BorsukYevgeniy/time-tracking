@@ -26,23 +26,10 @@ export class ReportService {
     userId: number,
     searchTimelogsDto: DateDto,
   ): Promise<Report> {
-    const { endDate: end, startDate: start } = searchTimelogsDto;
-
-    const [startDay, startMonth, startYear] = start
-      .toString()
-      .split('-')
-      .map(Number);
-
-    const [endDay, endMonth, endYear] = end.toString().split('-').map(Number);
-
-    const startDate = new Date(startYear, startMonth - 1, startDay, 0, 0, 0, 1);
-    const endDate = new Date(endYear, endMonth - 1, endDay, 23, 59, 59, 999);
-
     const timelogs = await firstValueFrom(
       this.timelogService.searchLogs({
         userId,
-        startDate,
-        endDate,
+        ...searchTimelogsDto,
       }),
     );
 
