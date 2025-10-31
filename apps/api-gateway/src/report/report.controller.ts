@@ -15,21 +15,21 @@ export class ReportController {
     @User() user: JwtPayload,
     @Query() searchTimelogsDto: DateDto,
   ) {
-    return this.reportService.generateReport(user.id, searchTimelogsDto);
+    return await this.reportService.generateReport(user.id, searchTimelogsDto);
   }
 
   @Get('daily')
   async getDailyReport(@User() user: JwtPayload) {
-    return this.reportService.generateDailyReport(user.id);
+    return await this.reportService.generateDailyReport(user.id);
   }
 
   @Get('monthly')
   async getMonthlyReport(@User() user: JwtPayload) {
-    return this.reportService.generateMonthlyReport(user.id);
+    return await this.reportService.generateMonthlyReport(user.id);
   }
 
   @Get('yearly')
   async getYearlyReport(@User() user: JwtPayload) {
-    return this.reportService.generateYearlyReport(user.id);
+    return await this.reportService.generateYearlyReport(user.id);
   }
 }
