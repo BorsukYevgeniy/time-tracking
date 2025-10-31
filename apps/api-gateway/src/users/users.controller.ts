@@ -20,13 +20,13 @@ export class UsersController {
   @Delete(':userId')
   @RequieredRoles(Role.ADMIN)
   @UseGuards(RolesGuard)
-  async deleteUserById(@Param('userId', ParseIntPipe) userId: number) {
+  deleteUserById(@Param('userId', ParseIntPipe) userId: number) {
     return this.usersService.delete(userId);
   }
 
   @Delete('me')
   @UseGuards(AuthGuard)
-  async deleteMe(@User() user: JwtPayload) {
+  deleteMe(@User() user: JwtPayload) {
     return this.usersService.delete(user.id);
   }
 }

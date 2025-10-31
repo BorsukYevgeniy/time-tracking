@@ -1,31 +1,28 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
-import { USER_CLIENT } from '@contracts/users';
-import { firstValueFrom } from 'rxjs';
-import { hash, compare } from 'bcrypt';
+import { CreateUserDto, User } from '@contracts/users';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { compare, hash } from 'bcrypt';
+import { firstValueFrom } from 'rxjs';
+import { UsersService } from '../users/users.service';
 import { LoginDto } from './dto/login.dto';
-import { CreateUserDto, User, USER_PATTERNS } from '@contracts/users';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @Inject(USER_CLIENT) private readonly userClient: ClientProxy,
+    private readonly userService: UsersService,
     private readonly jwtService: JwtService,
   ) {}
 
   private async generateToken(user: User): Promise<string> {
-    return await this.jwtService.signAsync(
-      {
-        id: user.id,
-        role: user.role
-      },
-    );
+    return await this.jwtService.signAsync({
+      id: user.id,
+      role: user.role,
+    });
   }
 
   async register(dto: CreateUserDto): Promise<string> {
     const user: User | null = await firstValueFrom(
-      this.userClient.send(USER_PATTERNS.FIND_BY_EMAIL, dto.email),
+      this.userService.getUserByEmail(dto.email),
     );
 
     if (user) {
@@ -35,10 +32,7 @@ export class AuthService {
     const hashedPassword = await hash(dto.password, 6);
 
     const newUser: User = await firstValueFrom(
-      this.userClient.send(USER_PATTERNS.CREATE, {
-        ...dto,
-        password: hashedPassword,
-      }),
+      this.userService.create({ ...dto, password: hashedPassword }),
     );
 
     return await this.generateToken(newUser);
@@ -46,7 +40,7 @@ export class AuthService {
 
   async login(dto: LoginDto): Promise<string> {
     const user: User | null = await firstValueFrom(
-      this.userClient.send(USER_PATTERNS.FIND_BY_EMAIL, dto.email),
+      this.userService.getUserByEmail(dto.email),
     );
 
     if (!user) {

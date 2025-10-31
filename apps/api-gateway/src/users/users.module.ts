@@ -23,7 +23,8 @@ import { ConfigModule, ConfigService } from '@shared/config';
       useFactory: (configService: ConfigService) => configService.JWT_CONFIG,
     }),
   ],
-  providers: [UsersService],
   controllers: [UsersController],
+  providers: [UsersService],
+  exports: [UsersService],
 })
 export class UsersModule {}
