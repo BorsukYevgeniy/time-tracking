@@ -1,5 +1,10 @@
-import { DateDto } from "./date.dto";
+import { Transform } from 'class-transformer';
+import { IsInt, IsPositive } from 'class-validator';
+import { DateDto } from './date.dto';
 
 export class SearchTimelogsDto extends DateDto {
-  userId: number
+  @IsInt()
+  @IsPositive()
+  @Transform(() => Number)
+  userId: number;
 }
