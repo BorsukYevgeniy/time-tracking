@@ -1,23 +1,36 @@
 import {
-  Controller,
-  Post,
   Body,
-  Res,
+  Controller,
   HttpCode,
   HttpStatus,
+  Post,
+  Res,
   UseGuards,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
 import { Response } from 'express';
+import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 
 import { CreateUserDto } from '@contracts/users';
 import { AuthGuard } from './guard/auth.guard';
 
+import {
+  ApiBadRequestResponse,
+  ApiBody,
+  ApiCookieAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @ApiBody({ type: CreateUserDto })
+  @ApiOperation({ description: 'Register new user' })
+  @ApiCreatedResponse({ description: 'Registered user' })
+  @ApiBadRequestResponse({ description: 'Invalid DTO or credentials' })
   @Post('register')
   async register(@Body() dto: CreateUserDto, @Res() res: Response) {
     const token = await this.authService.register(dto);
@@ -31,6 +44,10 @@ export class AuthController {
       .end();
   }
 
+  @ApiOperation({ description: 'Login' })
+  @ApiBody({ type: LoginDto })
+  @ApiOkResponse({ description: 'Login user' })
+  @ApiBadRequestResponse({ description: 'Invalid DTO or credentials' })
   @Post('login')
   @HttpCode(HttpStatus.OK)
   async login(@Body() dto: LoginDto, @Res() res: Response) {
@@ -41,9 +58,14 @@ export class AuthController {
         maxAge: 60 * 60 * 1000,
         httpOnly: true,
       })
-      .status(200).end();
+      .status(200)
+      .end();
   }
 
+  @ApiOperation({ description: 'Logout' })
+  @ApiCookieAuth('accessToken')
+  @ApiOkResponse({ description: 'Logout user' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized user' })
   @Post('logout')
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.OK)
